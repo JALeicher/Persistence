@@ -6,22 +6,26 @@ using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
+    //public static MainManager Instance;
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
-
     public Text ScoreText;
-    public GameObject GameOverText;
-    
+    public Text HighScoreText;
+    public GameObject GameOverText;   
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
-
-    
     // Start is called before the first frame update
     void Start()
     {
+        if(Persistence.Instance !=null){
+            ScoreText.text = $"{Persistence.Instance.playerName} : {m_Points}";
+        }
+
+        SetHighScore();
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -58,6 +62,8 @@ public class MainManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SetScore(m_Points);
+                Persistence.Instance.SavePlayerScore();
             }
         }
     }
@@ -65,7 +71,15 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"{Persistence.Instance.playerName} : {m_Points}";
+    }
+
+    void SetHighScore(){
+        HighScoreText.text =$"BestScore:{Persistence.Instance.highScoreName}:{Persistence.Instance.highScore}";
+    }
+
+    void SetScore(int num){
+        Persistence.Instance.playerScore = num;
     }
 
     public void GameOver()
