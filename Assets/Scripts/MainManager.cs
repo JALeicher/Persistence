@@ -61,9 +61,9 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 SetScore(m_Points);
-                Persistence.Instance.SavePlayerScore();
+        Persistence.Instance.SavePlayerScore();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
     }
@@ -86,5 +86,11 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    public void ExitGame(){
+        SetScore(m_Points);
+        Persistence.Instance.SavePlayerScore();
+        SceneManager.LoadScene(0);
     }
 }
